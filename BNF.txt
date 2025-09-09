@@ -1,29 +1,37 @@
 # Números, variables y asignaciones:
 
 # -- Definir los tipos
-<flotante> ::= (0.0)|-?0\ . [0-9]* [1-9]+|-?[1-9][0-9]* . ([0-9]*[1-9]+|0)
+<flotante> ::= (0.0) |-?0\ . [0-9]* [1-9]+|-?[1-9][0-9]* . ([0-9]*[1-9]+|0)
 
 <entero> ::=  -? [1 - 9] [0 - 9]* | 0
 
 #-- Las comillas son para indicar que es un simbolo literal terminal.
 <booleano> ::= [ "true" | "false"]    
 
-<char> ::= 
+#-- En teoria esto: '[^']'     Significa, cualquier caracter menos la comilla ()')
+<char> ::= '[^']'
 
-<string> ::=
+<string> ::= #/"([^"\\] |\ \[nrt])*"/ #-- [ntr] es para cosas como \n, \r, \t
 
 
+<operadorAritmetico> ::= (\+|\-|\*|\/|\/\/|%|\^)  #--[+\ | - | *\ | / | //]
+
+<operadorLogico> ::= (@|~|Σ)
+
+<operadorRelacional> ::= (==|!=|<=|>=|<|>)
+
+#-- Alternativa con sin reguex <operador> ::= "+" | "-" | "*" | "/" | "//"
+
+# -- Alternativa con reguex: <operador> ::= /(\+|\-|\*|\/|\/\/)/
 
 
-<operador> ::=  [+\ | - | *\ | / | //]
+<cAsignacion> ::= \=
 
-<cAsignacion> ::= =\
-
-<id> ::= [a-z A-Z _] [a-z A-Z 0-9 _]*
+<id> ::= [a-z A-Z ] [a-z A-Z 0-9 _]*
 
 <delimitador> ::= $
 
-<TipoVar> ::= [ int | float | boolean | char | string ]
+<TipoVar> ::= "int" | "float" | "boolean" | "char" | "string" | "int[]" | "char[]"
 
 <var> ::= <varCreacion> | <varAsignacion>
 
@@ -33,7 +41,41 @@
 
 # -- Las exresiones para una variables puden ser: nada mas numeros o caracteres, una operacion aritmetica o de union de caracteres, 
 # -- tambien puede ser entrada de teclado o tambien se podria hacer una condicional para saber asignar un valor booleano.
-<expresion> :== 
+<expresion> ::= <expresionNumerica> | <expresionAritmetica> | <expresionLiteral> | <expresionLogica> | <condicionBooleanda>
+
+#-- Def de expresiones basicos.
+<expresionNumerica> ::= <entero> | <flotante> | <id>
+
+<expresionChar> ::= <char> | <id>
+
+<expresionString> ::= <string> | <id>
+
+<expresionBooleana> ::= <booleano> | <id>
+
+
+# -- Def de operaciones de expresiones.
+<expresionAritmetica> ::= <expresionNumerica> | \( <expresionAritmetica> \) | <expresionAritmetica> <operadorAritmetico> <expresionAritmetica>
+
+
+
+#<expresionLiteral> ::= <expresionLiteral> \+ <expresionLiteral> # Esto no deberia de poder hacerse.
+
+
+
+<expresionLogica> ::= <expresionRelacional>
+                    | "(" <expresionLogica> ")"
+                    | <expresionLogica> <operadorLogico> <expresionLogica>
+                    | <operadorLogico> <expresionLogica>
+
+<expresionRelacional> ::= <expresionNumerica> <operadorRelacional> <expresionNumerica> 
+                        | <expresionChar> <operadorRelacional> <expresionChar> 
+                        | <expresionString> <operadorRelacional> <expresionString>
+                        | <expresionBooleana> <operadorRelacional> <expresionBooleana> 
+                        | \( <expresionRelacional> \)
+
+
+
+<expreioTeclado> ::= "input" \( <tipoVar>\)
 
 # Funciones con estructuras de control, bloques y sentencias:
 
@@ -53,7 +95,7 @@
 
 # Sentencias para crear variables locales y globales, se asignan expresiones y pueden haber expresiones sin asignacion:
 
-<sentenciaAsignacion> ::= id cAsignacion expresion delimitador
+<varAsignacion> ::= id cAsignacion expresion delimitador
 
 # Permitir expresiones combinadas con literales, variables, arreglos y/o funciones, de los tipos reconocidos por gramatica:
 
@@ -75,12 +117,19 @@
 
 # Definición de unicamente un procedimiento main (principal) tipo void sin parametros:
 
+# -- Def de main, puede cambiarse 
+<inicio> ::= "void" "principal" \( \) ¿<sentencias>\?
+
+#-- Def de un programa.
+<programa> ::= <comentarioLinea>* <comentarioBloque>* <funciones>? <comentarioLinea>* <comentarioBloque>* <inicio> <comentarioLinea>* <comentarioBloque>*
+
+
 # Comentarios en una linea o en multiples lineas:
 
 #-- Estos podrian ser un monton de opciones mas.
 <comentarioLinea> ::= |\sentencia
 
-<comentarioBloque> ::= ¡sentencias! | -> Aqui van los controles de flujo, funcion, loops, numeros, letras, 
+<comentarioBloque> ::= ¡sentencias! | -> #Aqui van los controles de flujo, funcion, loops, numeros, letras, 
 
 • Main -> void main \( \) bloque
 • Bloque -> ¿ sentencias ?
@@ -93,3 +142,4 @@
 • Programa -> main funciones
 • Programa -> funciones main
 Programa -> funciones main funciones
+
