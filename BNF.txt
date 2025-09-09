@@ -1,0 +1,80 @@
+# Números, variables y asignaciones:
+
+<flotante> :== (0.0)|-?0\ . [0-9]* [1-9]+|-?[1-9][0-9]* . ([0-9]*[1-9]+|0)
+
+<entero> :==  -? [1 - 9] [0 - 9]* | 0
+
+<operador> :==  [+\ - *\ / ]
+
+<cAsignacion> :== =\
+
+<id> :== [a-z A-Z _] [a-z A-Z 0-9 _]*
+
+<delimitador> :== $
+
+<TipoVar> :== [ int | float | boolean | char | string ]
+
+<Var> :== 
+
+<VarCreacion> :== let 
+
+<VarAsignacion> :== 
+
+
+# Funciones con estructuras de control, bloques y sentencias:
+
+• Params -> params
+• Params -> params, param
+• Param -> var
+• Funcion -> tipo id (\ \) bloque
+• Funcion -> tipo id (\ params \) bloque
+• Funcion -> funcion
+• Funciones -> funcion
+
+# Variables globales
+
+# Tipos de variables enteras, flotantes, booleanas, caracteres, cadenas de caracteres y arreglos:
+
+# Arreglos tipo char y entero; get y update de elementos, ser usados en ex´resiones y permitir creacion con asignacion:
+
+# Sentencias para crear variables locales y globales, se asignan expresiones y pueden haber expresiones sin asignacion:
+
+<sentenciaAsignacion> :== id cAsignacion expresion delimitador
+
+# Permitir expresiones combinadas con literales, variables, arreglos y/o funciones, de los tipos reconocidos por gramatica:
+
+# Operadores y operandos respetando precedencia y permitir uso de parentesis:
+
+# Expresiones aritmeticas binarias suma (+), resta (-), división (// y /) – entera o decimal según el tipo--, multiplicación (*), módulo (%) y potencia (^). Para enteros o reales:
+
+# expresiones aritméticas unarias de negativo (-), ++ y -- después del operando; el negativo se puede aplicar a literales enteros y flotantes, el ++ y -- se aplica a variables enteras y flotantes:
+
+# expresiones relacionales (sobre enteros y flotantes) de menor, menor o igual, mayor, mayor o igual, igual y diferente. Los operadores igual y diferente permiten adicionalmente tipo booleano.
+
+# expresiones lógicas de conjunción (@), disyunción (~) y negación (ésta debe ser de tipo caracter (Σ)):
+
+# Estructuras de control decide of, loop, for->to/downto->do, return y break:
+
+# Funciones que leen enteros y flotantes y escribem cadenas de caracteres, booleans, enteros y flotantes (output y input palabras reservadas):
+
+# Creación de funciones, retornar valores y recibir parametros con tipo especifico:
+
+# Definición de unicamente un procedimiento main (principal) tipo void sin parametros:
+
+# Comentarios en una linea o en multiples lineas:
+
+<comentarioLinea> :== |\sentencia
+
+<comentarioBloque> :== ¡sentencias! | -> Aqui van los controles de flujo, funcion, loops, numeros, letras, 
+
+• Main -> void main \( \) bloque
+• Bloque -> ¿ sentencias ?
+# cambiar sentencias, pueden ser un monton de opciones awiwiwiwi
+• Sentencias -> sentencias sentencia
+• Sentencias -> sentencia
+• Sentencia -> assing
+• Sentencia -> creacion
+• Programa -> main
+• Programa -> main funciones
+• Programa -> funciones main
+Programa -> funciones main funciones
