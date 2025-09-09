@@ -23,17 +23,20 @@
 
 <delimitador> ::= $
 
-<TipoVar> ::= [ int | float | boolean | char | string ]
+<tipoVar> ::= "int" | "float" | "boolean" | "char" | "string" | "int[]" | "char[]"
 
-<var> ::= <varCreacion> | <varAsignacion>
+<tipoFuncion> ::= "int" | "float" | "boolean" | "void"
 
-<varCreacion> ::= "let" <tipo> <id> <delimitador>
+<var> ::= <varCreacion> | <varCyAsignacion>
 
-<varCyAsignacion> ::= "let" <tipo> <id> <cAsignacion> <expresion> <delimitador>
+<varCreacion> ::= "let" <tipoVar> <id> <delimitador>
+
+<varAsignacion> ::= <id> <cAsignacion> <expresion> <delimitador> | <id> <funcionLlamada> <delimitador>
+
+<varCyAsignacion> ::= "let" <tipoVar> <id> <cAsignacion> <expresion> <delimitador>
 
 # -- Las exresiones para una variables puden ser: nada mas numeros o caracteres, una operacion aritmetica o de union de caracteres, 
 # -- tambien puede ser entrada de teclado o tambien se podria hacer una condicional para saber asignar un valor booleano.
-<expresion> :== 
 
 # Funciones con estructuras de control, bloques y sentencias:
 
@@ -45,15 +48,42 @@
 • Funcion -> funcion
 • Funciones -> funcion
 
-# Variables globales
+<funciones> ::= <funcion> | <funciones> <funcion>
+
+<funcion> ::= <tipoFuncion> <id> \( <params> \) <bloque> | <tipoFuncion> <id> \( \) <bloque>
+
+<params> ::= <param> | <params> , <param>
+
+<param> ::= <tipoVar> <id>
+
+<bloque> ::= ¿ <sentencias> \?
+
+<sentencias> ::= <sentencia> | <sentencias> <sentencia>
+
+<sentencia> ::= <var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output>
+
+<estructruraControl> ::= <decide> | <loop> | <for> # luego se definen abajo
+
+<funcionLlamada> ::= <id> \( <params> \) <delimitador> | <id> \( \) <delimitador>
+
+<return> ::= "return" <expresion> <delimitador> | "return" <delimitador>
+
+<break> ::= "break" <delimitador>
+
+<output> ::= "output" \( <expresion> \) <delimitador>
+
+# Variables globales:
+
+<varGlobal> ::= <varGlobalAsignacion> | <varGlobalCreacion>
+<varGlobalAsignacion> ::= "global" <tipoVar> <id> <cAsignacion> <expresion> <delimitador>
+<varGlobalCreacion> ::= "global" <tipoVar> <id> <delimitador>
 
 # Tipos de variables enteras, flotantes, booleanas, caracteres, cadenas de caracteres y arreglos:
 
-# Arreglos tipo char y entero; get y update de elementos, ser usados en ex´resiones y permitir creacion con asignacion:
+# Arreglos tipo char y entero; get y update de elementos, ser usados en expresiones y permitir creacion con asignacion:
 
 # Sentencias para crear variables locales y globales, se asignan expresiones y pueden haber expresiones sin asignacion:
 
-<sentenciaAsignacion> ::= id cAsignacion expresion delimitador
 
 # Permitir expresiones combinadas con literales, variables, arreglos y/o funciones, de los tipos reconocidos por gramatica:
 
