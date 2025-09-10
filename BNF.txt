@@ -57,8 +57,27 @@
 <expresionBooleana> ::= <booleano> | <id>
 
 
-# -- Def de operaciones de expresiones.
-<expresionAritmetica> ::= <expresionNumerica> | \( <expresionAritmetica> \) | <expresionAritmetica> <operadorAritmetico> <expresionAritmetica>
+# -- Def de operaciones de expresiones, Construccion con orden de precedencia.
+#<expresionAritmetica> ::= <expresionNumerica> | \( <expresionAritmetica> \) | <expresionAritmetica> <operadorAritmetico> <expresionAritmetica>
+
+
+<expresionAritmetica> ::= <expresionSuma>
+
+<expresionSuma> ::= <expresionSuma> ("+" | "-") <expresionProducto>
+                 | <expresionProducto>
+
+<expresionProducto> ::= <expresionProducto> ("*" | "/" | "//" | "%") <expresionPotencia>
+                      | <expresionPotencia>
+
+<expresionPotencia> ::= <expresionFactor> "^" <expresionPotencia>
+                      | <expresionFactor>
+
+<expresionFactor> ::= "(" <expresionAritmetica> ")"
+                    | <expresionNumerica>
+
+
+
+
 
 
 
