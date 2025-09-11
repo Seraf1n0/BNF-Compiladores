@@ -1,8 +1,4 @@
-# -- Definicion de un espacio en blanco
-<espacio> ::= " " | "\t"
-<espaciosEnBlanco> ::= <espacio>* 
-
-
+<espacio_blanco> ::= ' ' | '\t' | '\n' | '\r'
 # Números, variables y asignaciones:
 
 # -- Definir los tipos
@@ -51,7 +47,7 @@
 
 <tipoVar> ::= "int" | "float" | "boolean" | "char" | "string" 
 
-<tipoFuncion> ::= "int" | "float" | "boolean" | "void"
+<tipoFuncion> ::= "int" | "float" | "boolean"
 
 # -- Tipos de datos para definir listas.
 <tipoLista> ::=  <tipoListaBase> | <tipoListaTamaño>
@@ -63,9 +59,9 @@
 # -- Definir variables.
 <var> ::= <varCreacion> | <varCyAsignacion>
 
-<varCreacion> ::= "let" <tipoVar> <id> <delimitador>
+<varCreacion> ::= "let" <espacio_blanco> <tipoVar> <espacio_blanco> <id> <delimitador>
 
-<varAsignacion> ::= <id> <cAsignacion> <expresion> <delimitador> | <id> <funcionLlamada> <delimitador>
+<varAsignacion> ::= <id> <espacio_blanco> <cAsignacion> <espacio_blanco> <expresion> <delimitador> | <id> <espacio_blanco> <funcionLlamada> <delimitador>
 
 <varCyAsignacion> ::= "let" <tipoVar> <id> <cAsignacion> <expresion> <delimitador>
 
@@ -155,7 +151,7 @@
 
 <param> ::= <tipoVar> <id>
 
-<bloque> ::= ¿ <sentencias> \?
+<bloque> ::= ¿ <espacio_blanco>* <sentencias> <espacio_blanco>* \?
 
 <sentencias> ::= <sentencia> | <sentencias> <sentencia>
 
@@ -163,7 +159,18 @@
 
 <estructruraControl> ::= <decide> | <loop> | <for> # luego se definen abajo
 
-<funcionLlamada> ::= <id> \( <params> \) <delimitador> | <id> \( \) <delimitador>
+# Decide es de la forma decide of (condicion -> bloque)+ (else -> bloque)? end decide opcional
+<decide> ::= "decide of" ( <condicion> "->" <bloque>)+ ("else" <bloque> )? "end" "decide" <delimitador>
+
+<condicion> ::= "є" <expresion> "э"
+
+# Loop es de la forma loop instrucciones... exit wgen condicion$ end loop$
+<loop> ::= "loop" <sentencias> <break>? "exit when" <condicion> <delimitador> "end" "loop" <delimitador>
+
+# For es de la forma for <id> step <entero> to/downto <expresion> do bloque
+<for> ::= "for" <id> "step" <entero> ("to" | "downto") <expresion> "do" <bloque> <delimitador>
+
+<funcionLlamada> ::= <id> "є" <params> "э" <delimitador> | <id> "є" "э"
 
 <return> ::= "return" <expresion> <delimitador> | "return" <delimitador>
 
