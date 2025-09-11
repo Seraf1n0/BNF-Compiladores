@@ -1,3 +1,8 @@
+# -- Definicion de un espacio en blanco
+<espacio> ::= " " | "\t"
+<espaciosEnBlanco> ::= <espacio>* 
+
+
 # Números, variables y asignaciones:
 
 # -- Definir los tipos
