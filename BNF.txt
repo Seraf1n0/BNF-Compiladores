@@ -5,8 +5,10 @@
 
 <entero> ::=  -? [1 - 9] [0 - 9]* | 0
 
+<enteroPositivo> ::= [1 - 9] [0 - 9]* | 0
+
 #-- Las comillas son para indicar que es un simbolo literal terminal.
-<booleano> ::= [ "true" | "false"]    
+<booleano> ::=  "true" | "false"    
 
 #-- En teoria esto: '[^']'     Significa, cualquier caracter menos la comilla ()')
 <char> ::= '[^']'
@@ -14,11 +16,22 @@
 <string> ::= #/"([^"\\] |\ \[nrt])*"/ #-- [ntr] es para cosas como \n, \r, \t
 
 
-<operadorAritmetico> ::= (\+|\-|\*|\/|\/\/|%|\^)  #--[+\ | - | *\ | / | //]
+<operadorAritmetico> ::= <operadorAritmeticoBase> | <operadorAritmeticoMDM> | <operadorAritmeticoPotencia> #(\+|\-|\*|\/|\/\/|%|\^)  #--[+\ | - | *\ | / | //]
+
+<operadorAritmeticoBase> ::= (\+|\-)
+
+<operadorAritmeticoMDM> ::= (\*|\/|\/\/|%)
+
+<operadorAritmeticoPotencia> ::= (\^) 
+
 
 <operadorLogico> ::= (@|~|Σ)
 
-<operadorRelacional> ::= (==|!=|<=|>=|<|>)
+<operadorRelacional> ::= <operadorRelacionalMayores> | <operadorRelacionalIgualdad>
+
+<operadorRelacionalMayores> ::= ("<="|">="|"<"|">")
+
+<operadorRelacionalIgualdad> ::= ("=="|"!=")
 
 #-- Alternativa con sin reguex <operador> ::= "+" | "-" | "*" | "/" | "//"
 
@@ -31,10 +44,18 @@
 
 <delimitador> ::= $
 
-<tipoVar> ::= "int" | "float" | "boolean" | "char" | "string" | "int[]" | "char[]"
+<tipoVar> ::= "int" | "float" | "boolean" | "char" | "string" 
 
 <tipoFuncion> ::= "int" | "float" | "boolean" | "void"
 
+# -- Tipos de datos para definir listas.
+<tipoLista> ::=  <tipoListaBase> | <tipoListaTamaño>
+
+<tipoListaBase> ::= "int" "[" "]" | "char" "[" "]"
+
+<tipoListaTamaño> ::= "int" "[" <entero> "]" | "char" "[" <entero> "]"
+
+# -- Definir variables.
 <var> ::= <varCreacion> | <varCyAsignacion>
 
 <varCreacion> ::= "let" <tipoVar> <id> <delimitador>
@@ -43,12 +64,14 @@
 
 <varCyAsignacion> ::= "let" <tipoVar> <id> <cAsignacion> <expresion> <delimitador>
 
+
+
 # -- Las exresiones para una variables puden ser: nada mas numeros o caracteres, una operacion aritmetica o de union de caracteres, 
 # -- tambien puede ser entrada de teclado o tambien se podria hacer una condicional para saber asignar un valor booleano.
-<expresion> ::= <expresionNumerica> | <expresionAritmetica> | <expresionLiteral> | <expresionLogica> | <condicionBooleanda>
+<expresion> ::= <expresionNumerica> | <expresionAritmetica> | <expresionChar> | <expresionBooleana> | <expresionLogica> | <expresionRelacional>
 
 #-- Def de expresiones basicos.
-<expresionNumerica> ::= <entero> | <flotante> | <id>
+<expresionNumerica> ::= <entero> | <flotante> | <id> | <obtenerElementoLista>
 
 <expresionChar> ::= <char> | <id>
 
@@ -60,45 +83,54 @@
 # -- Def de operaciones de expresiones, Construccion con orden de precedencia.
 #<expresionAritmetica> ::= <expresionNumerica> | \( <expresionAritmetica> \) | <expresionAritmetica> <operadorAritmetico> <expresionAritmetica>
 
-
+# -- La expresion aritmetica base.
 <expresionAritmetica> ::= <expresionSuma>
 
-<expresionSuma> ::= <expresionSuma> ("+" | "-") <expresionProducto>
+# -- La base se puede formar por una operacion base o por una de prodcutos.
+<expresionSuma> ::= <expresionSuma> <operadorAritmeticoBase> <expresionProducto>
                  | <expresionProducto>
 
-<expresionProducto> ::= <expresionProducto> ("*" | "/" | "//" | "%") <expresionPotencia>
+# -- La de prodcuto esta conformada por la de productos o la de potencia.
+<expresionProducto> ::= <expresionProducto> <operadorAritmeticoMDM> <expresionPotencia> #("*" | "/" | "//" | "%")
                       | <expresionPotencia>
 
-<expresionPotencia> ::= <expresionFactor> "^" <expresionPotencia>
+# -- La de potencia esta formada por potencia o una de factor.
+<expresionPotencia> ::= <expresionFactor> <operadorAritmeticoPotencia> <expresionPotencia>
                       | <expresionFactor>
 
-<expresionFactor> ::= "(" <expresionAritmetica> ")"
+# -- La de factor es el termino base para cualquier expresio aritmetia 
+<expresionFactor> ::= "є" <expresionAritmetica> "э"
                     | <expresionNumerica>
+                    | <expresionAritmeticaUnaria>
+                    | <expresionAritmeticaUnariaNegativa>
 
 
+# --Posfija
+<expresionAritmeticaUnaria> ::= <id> "++" | <id> "--"
 
-
-
+# -- Esto es basicamente para volver un valor negativo, por ejemplo: - 5 | - 3.34 | - x
+<expresionAritmeticaUnariaNegativa> ::= "-" <expresionNumerica>
 
 
 #<expresionLiteral> ::= <expresionLiteral> \+ <expresionLiteral> # Esto no deberia de poder hacerse.
 
 
-
+# -- (@|~|Σ)
 <expresionLogica> ::= <expresionRelacional>
-                    | "(" <expresionLogica> ")"
+                    | "є" <expresionLogica> "э"
                     | <expresionLogica> <operadorLogico> <expresionLogica>
                     | <operadorLogico> <expresionLogica>
 
+# -- (==|!=|<=|>=|<|>)
 <expresionRelacional> ::= <expresionNumerica> <operadorRelacional> <expresionNumerica> 
-                        | <expresionChar> <operadorRelacional> <expresionChar> 
-                        | <expresionString> <operadorRelacional> <expresionString>
-                        | <expresionBooleana> <operadorRelacional> <expresionBooleana> 
-                        | \( <expresionRelacional> \)
+                        | <expresionBooleana> <operadorRelacionalIgualdad> <expresionBooleana> 
+                        | "є" <expresionRelacional> "э"
+                        #-- | <expresionChar> <operadorRelacional> <expresionChar> 
+                        #-- | <expresionString> <operadorRelacional> <expresionString>
 
 
-
-<expreioTeclado> ::= "input" \( <tipoVar>\)
+# -- Falta definir con mayor exactitud esto de la entrada.
+<expreioTeclado> ::= "input" "є" <tipoVar> "э"
 
 # Funciones con estructuras de control, bloques y sentencias:
 
@@ -142,7 +174,33 @@
 
 # Tipos de variables enteras, flotantes, booleanas, caracteres, cadenas de caracteres y arreglos:
 
-# Arreglos tipo char y entero; get y update de elementos, ser usados en expresiones y permitir creacion con asignacion:
+# >>> Arreglos tipo char y entero; get y update de elementos, ser usados en expresiones y permitir creacion con asignacion:
+
+# Declarar listas
+
+<lista> ::= <declaracionLista> | <creacionYAsignacionLista>
+
+# -- Declarar listas de forma basica
+<declaracionLista> ::= "let" <tipoLista> <id> <delimitador>
+
+# -- Esto es para crear una lista con asignacion: let int[] = ¿12,34?
+<creacionYAsignacionLista> ::= "let" <tipoLista> <id> "=" "¿" <elementos> "?" "$" #<elementoLista> ("," <elementoLista>)*
+
+#<elementos> ::= <elementoLista>
+
+<elementos> ::= <elementoLista> ("," <elementoLista>)* #<elementos> "," <elementoLista>  
+
+# -- Tipos de datos que puede tener una lista.
+<elementoLista> ::= <entero> | <char>
+
+# -- Modificar los elementos de una lista: lista[4] = 23$
+<modificarElementoLista> ::= <id> "[" <enteroPositivo> "]" <cAsignacion> <elementoLista> <delimitador> | <id> "[" <id> "]" <cAsignacion> <elementoLista> <delimitador>
+
+# -- Obtener los elementos de una lista: lista[4]    -> Esto puede ser usado en otras expresiones por lo que no lleva delimitador
+<obtenerElementoLista> ::= <id> "[" <enteroPositivo> "]" | <id> "[" <id> "]"
+
+
+
 
 # Sentencias para crear variables locales y globales, se asignan expresiones y pueden haber expresiones sin asignacion:
 
