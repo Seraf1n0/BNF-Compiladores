@@ -1,6 +1,7 @@
 <espacio_blanco> ::= ' ' | '\t' | '\n' | '\r'
 # Números, variables y asignaciones:
-
+<espacio> ::= " " | "\t"
+<espaciosEnBlanco> ::= <espacio>* 
 # -- Definir los tipos
 <flotante> ::= (0.0) |-?0\ . [0-9]* [1-9]+|-?[1-9][0-9]* . ([0-9]*[1-9]+|0)
 
