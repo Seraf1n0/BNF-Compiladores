@@ -135,14 +135,6 @@
 
 # Funciones con estructuras de control, bloques y sentencias:
 
-• Params -> params
-• Params -> params, param
-• Param -> var
-• Funcion -> tipo id (\ \) bloque
-• Funcion -> tipo id (\ params \) bloque
-• Funcion -> funcion
-• Funciones -> funcion
-
 <funciones> ::= <funcion> | <funciones> <funcion>
 
 <funcion> ::= <tipoFuncion> <id> \( <params> \) <bloque> | <tipoFuncion> <id> \( \) <bloque>
