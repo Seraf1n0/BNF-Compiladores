@@ -73,7 +73,7 @@
 <expresion> ::= <expresionNumerica> | <expresionAritmetica> | <expresionChar> | <expresionBooleana> | <expresionLogica> | <expresionRelacional>
 
 #-- Def de expresiones basicos.
-<expresionNumerica> ::= <entero> | <flotante> | <id> | <obtenerElementoLista> | <llamadaAFuncion>
+<expresionNumerica> ::= <entero> | <flotante> | <id> | <obtenerElementoLista> | <llamadaAFuncion> | <input>
 
 <expresionChar> ::= <char> | <id>
 
