@@ -13,9 +13,17 @@
 <booleano> ::=  "true" | "false"    
 
 #-- En teoria esto: '[^']'     Significa, cualquier caracter menos la comilla ()')
-<char> ::= '[^']'
+<char> ::= "'" <caracterSimple> "'"  # --"'" [^'] "'"
 
-<string> ::= #/"([^"\\] |\ \[nrt])*"/ #-- [ntr] es para cosas como \n, \r, \t
+<caracterSimple> ::= [^'\n\r\t] # -- Se definen los caracteres validos.
+
+# -- Es un caracter cero o mas veces, tambien puede ser caracteres especiales como tabulaciones y saltos de linea.
+<string> ::= "\"" (<caracterString> | <caracterEscape>)* "\"" 
+
+<stringSimple> ::= [^"\n\r\t\\] # -- Se definen los caracteres validos
+
+<StringEscape> ::= "\\n" | "\\t" | "\\r" # -- Se definen los caracteres especiales validos.
+
 
 
 <operadorAritmetico> ::= <operadorAritmeticoBase> | <operadorAritmeticoMDM> | <operadorAritmeticoPotencia> #(\+|\-|\*|\/|\/\/|%|\^)  #--[+\ | - | *\ | / | //]
