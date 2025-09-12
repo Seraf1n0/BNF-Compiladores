@@ -48,6 +48,8 @@
 
 <tipoVar> ::= "int" | "float" | "boolean" | "char" | "string" 
 
+<tipoInput> ::= "int" | "float"
+
 <tipoFuncion> ::= "int" | "float" | "boolean"
 
 # -- Tipos de datos para definir listas.
@@ -156,7 +158,7 @@
 
 <sentencias> ::= <sentencia> | <sentencias> <sentencia>
 
-<sentencia> ::= <var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output>
+<sentencia> ::= <var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output> | <modificarElementoLista> | <lista>
 
 <estructruraControl> ::= <decide> | <loop> | <for> # luego se definen abajo
 
@@ -177,7 +179,14 @@
 
 <break> ::= "break" <delimitador>
 
-<output> ::= "output" \( <expresion> \) <delimitador>
+# El output puede ser de la forma output є expresion э o output є expresion э << output para multiples outputs en una linea.
+<output> ::= <output_inline> | <output> "<<" <output_inline>
+
+<output_inline> ::= "output" "є" <expresion> "э"
+
+# Input puede ser de la forma input є tipo э
+<input> ::= "input" "є" <tipoInput> "э" <delimitador>
+
 
 # Variables globales:
 
