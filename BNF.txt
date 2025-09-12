@@ -34,11 +34,6 @@
 
 <operadorRelacionalIgualdad> ::= ("=="|"!=")
 
-#-- Alternativa con sin reguex <operador> ::= "+" | "-" | "*" | "/" | "//"
-
-# -- Alternativa con reguex: <operador> ::= /(\+|\-|\*|\/|\/\/)/
-
-
 <cAsignacion> ::= \=
 
 <id> ::= [a-z A-Z ] [a-z A-Z 0-9 _]*
@@ -152,7 +147,7 @@
 <estructruraControl> ::= <decide> | <loop> | <for> # luego se definen abajo
 
 # Decide es de la forma decide of (condicion -> bloque)+ (else -> bloque)? end decide opcional
-<decide> ::= "decide of" ( <condicion> "->" <bloque>)+ ("else" <bloque> )? "end" "decide" <delimitador>
+<decide> ::= "decide" <espacio> "of" ( <condicion> "->" <bloque>)+ ("else" <bloque> )? "end" "decide" <delimitador>
 
 <condicion> ::= "є" <expresion> "э"
 
