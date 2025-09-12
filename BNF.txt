@@ -133,9 +133,6 @@
                         #-- | <expresionString> <operadorRelacional> <expresionString>
 
 
-# -- Falta definir con mayor exactitud esto de la entrada.
-<expreioTeclado> ::= "input" "є" <tipoVar> "э"
-
 # Funciones con estructuras de control, bloques y sentencias:
 
 • Params -> params
