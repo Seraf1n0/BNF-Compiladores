@@ -157,7 +157,7 @@
 
 <sentencias> ::= <sentencia> | <sentencias> <sentencia>
 
-<sentencia> ::= <var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output>
+<sentencia> ::= <var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output> | <modificarElementoLista> | <lista>
 
 <estructruraControl> ::= <decide> | <loop> | <for> # luego se definen abajo
 
