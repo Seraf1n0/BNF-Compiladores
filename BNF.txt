@@ -1,4 +1,4 @@
-<espacio_blanco> ::= ' ' | '\t' | '\n' | '\r'
+<saltoLinea> ::= "\n"
 # Números, variables y asignaciones:
 <espacio> ::= " " | "\t"
 <espaciosEnBlanco> ::= <espacio>* 
@@ -25,7 +25,6 @@
 <operadorAritmeticoMDM> ::= (\*|\/|\/\/|%)
 
 <operadorAritmeticoPotencia> ::= (\^) 
-
 
 <operadorLogico> ::= (@|~|Σ)
 
@@ -62,9 +61,9 @@
 # -- Definir variables.
 <var> ::= <varCreacion> | <varCyAsignacion>
 
-<varCreacion> ::= "let" <espacio_blanco> <tipoVar> <espacio_blanco> <id> <delimitador>
+<varCreacion> ::= "let" <espacio> <tipoVar> <espacio> <id> <delimitador>
 
-<varAsignacion> ::= <id> <espacio_blanco> <cAsignacion> <espacio_blanco> <expresion> <delimitador> | <id> <espacio_blanco> <funcionLlamada> <delimitador>
+<varAsignacion> ::= <id> <espacio> <cAsignacion> <espacio> <expresion> <delimitador> | <id> <espacio> <funcionLlamada> <delimitador>
 
 <varCyAsignacion> ::= "let" <tipoVar> <id> <cAsignacion> <expresion> <delimitador>
 
@@ -134,28 +133,21 @@
 
 
 # Funciones con estructuras de control, bloques y sentencias:
-
-• Params -> params
-• Params -> params, param
-• Param -> var
-• Funcion -> tipo id (\ \) bloque
-• Funcion -> tipo id (\ params \) bloque
-• Funcion -> funcion
-• Funciones -> funcion
-
 <funciones> ::= <funcion> | <funciones> <funcion>
 
-<funcion> ::= <tipoFuncion> <id> \( <params> \) <bloque> | <tipoFuncion> <id> \( \) <bloque>
+<funcion> ::= <tipoFuncion> <id> "є" <params> "э" <bloque> | <tipoFuncion> <id> "є" "э" <espaciosEnBlanco> <bloque>
 
 <params> ::= <param> | <params> , <param>
 
 <param> ::= <tipoVar> <id>
 
-<bloque> ::= ¿ <espacio_blanco>* <sentencias> <espacio_blanco>* \?
+<bloque> ::= ¿ <saltoLinea>* <espaciosEnBlanco> <sentencias> <saltoLinea>* \?
+
+<Sentencias> ::= <sentencias> <comentarioLinea>?
 
 <sentencias> ::= <sentencia> | <sentencias> <sentencia>
 
-<sentencia> ::= <var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output> | <modificarElementoLista> | <lista>
+<sentencia> ::= (<var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output> | <modificarElementoLista> | <lista> | <varGlobal>)
 
 <estructruraControl> ::= <decide> | <loop> | <for> # luego se definen abajo
 
@@ -170,13 +162,14 @@
 # For es de la forma for <id> step <entero> to/downto <expresion> do bloque
 <for> ::= "for" <id> "step" <entero> ("to" | "downto") <expresion> "do" <bloque> <delimitador>
 
-<funcionLlamada> ::= <id> "є" <params> "э" <delimitador> | <id> "є" "э"
+<funcionLlamada> ::= <id> "є" <params> "э" <delimitador> | <id> "є" "э" <delimitador>
 
 <return> ::= "return" <expresion> <delimitador> | "return" <delimitador>
 
 <break> ::= "break" <delimitador>
 
 # El output puede ser de la forma output є expresion э o output є expresion э << output para multiples outputs en una linea.
+<output> ::= <output> <delimitador>
 <output> ::= <output_inline> | <output> "<<" <output_inline>
 
 <output_inline> ::= "output" "є" <expresion> "э"
@@ -218,38 +211,13 @@
 # -- Obtener los elementos de una lista: lista[4]    -> Esto puede ser usado en otras expresiones por lo que no lleva delimitador
 <obtenerElementoLista> ::= <id> "[" <enteroPositivo> "]" | <id> "[" <id> "]"
 
-
-
-
-# Sentencias para crear variables locales y globales, se asignan expresiones y pueden haber expresiones sin asignacion:
-
-
-# Permitir expresiones combinadas con literales, variables, arreglos y/o funciones, de los tipos reconocidos por gramatica:
-
-# Operadores y operandos respetando precedencia y permitir uso de parentesis:
-
-# Expresiones aritmeticas binarias suma (+), resta (-), división (// y /) – entera o decimal según el tipo--, multiplicación (*), módulo (%) y potencia (^). Para enteros o reales:
-
-# expresiones aritméticas unarias de negativo (-), ++ y -- después del operando; el negativo se puede aplicar a literales enteros y flotantes, el ++ y -- se aplica a variables enteras y flotantes:
-
-# expresiones relacionales (sobre enteros y flotantes) de menor, menor o igual, mayor, mayor o igual, igual y diferente. Los operadores igual y diferente permiten adicionalmente tipo booleano.
-
-# expresiones lógicas de conjunción (@), disyunción (~) y negación (ésta debe ser de tipo caracter (Σ)):
-
-# Estructuras de control decide of, loop, for->to/downto->do, return y break:
-
-# Funciones que leen enteros y flotantes y escribem cadenas de caracteres, booleans, enteros y flotantes (output y input palabras reservadas):
-
-# Creación de funciones, retornar valores y recibir parametros con tipo especifico:
-
 # Definición de unicamente un procedimiento main (principal) tipo void sin parametros:
 
 # -- Def de main, puede cambiarse 
-<inicio> ::= "void" "principal" \( \) ¿<sentencias>\?
+<principal> ::= "void" "principal" "є" <expresion> "э" <saltoLinea>* <espaciosEnBlanco> <bloque>
 
 #-- Def de un programa.
-<programa> ::= <comentarioLinea>* <comentarioBloque>* <funciones>? <comentarioLinea>* <comentarioBloque>* <inicio> <comentarioLinea>* <comentarioBloque>*
-
+<programa> ::= <comentarios>? (<varGlobal>*)? <comentarios>? <funciones>? <comentarios>? <principal> <comentarios>?
 
 # Comentarios en una linea o en multiples lineas:
 
