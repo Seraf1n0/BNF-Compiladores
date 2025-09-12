@@ -75,7 +75,7 @@
 <expresion> ::= <expresionNumerica> | <expresionAritmetica> | <expresionChar> | <expresionBooleana> | <expresionLogica> | <expresionRelacional>
 
 #-- Def de expresiones basicos.
-<expresionNumerica> ::= <entero> | <flotante> | <id> | <obtenerElementoLista> | <llamadaAFuncion> | <input>
+<expresionNumerica> ::= <entero> | <flotante> | <id> | <obtenerElementoLista> | <funcionLlamada> | <input>
 
 <expresionChar> ::= <char> | <id>
 
@@ -170,7 +170,7 @@
 # For es de la forma for <id> step <entero> to/downto <expresion> do bloque
 <for> ::= "for" <id> "step" <entero> ("to" | "downto") <expresion> "do" <bloque> <delimitador>
 
-<funcionLlamada> ::= <id> "є" <params> "э" <delimitador> | <id> "є" "э"
+<funcionLlamada> ::= <id> "є" <params> "э" <delimitador> | <id> "є" "э" | <id> "є" <params> "э"
 
 <return> ::= "return" <expresion> <delimitador> | "return" <delimitador>
 
@@ -253,20 +253,14 @@
 
 # Comentarios en una linea o en multiples lineas:
 
-#-- Estos podrian ser un monton de opciones mas.
-<comentarioLinea> ::= |\sentencia
+# -- Todo los comentarios permitidos.
+<comentarios> ::= <comentarioLinea> | <comentarioBloque>
 
-<comentarioBloque> ::= ¡sentencias! | -> #Aqui van los controles de flujo, funcion, loops, numeros, letras, 
+# -- Se permite cualquier cosa menos lo que serian los saltos de linea.
+<comentarioLinea> ::= \|[^\n\r]*
 
-• Main -> void main \( \) bloque
-• Bloque -> ¿ sentencias ?
-# cambiar sentencias, pueden ser un monton de opciones awiwiwiwi
-• Sentencias -> sentencias sentencia
-• Sentencias -> sentencia
-• Sentencia -> assing
-• Sentencia -> creacion
-• Programa -> main
-• Programa -> main funciones
-• Programa -> funciones main
-Programa -> funciones main funciones
+# -- Se permite cualquier caracter o o mas veces y puede o no tener .
+<comentarioBloque> ::= ¡[\s\S]*?! #Aqui van los controles de flujo, funcion, loops, numeros, letras, 
+
+
 
