@@ -143,7 +143,7 @@
 
 <bloque> ::= ¿ <saltoLinea>* <espaciosEnBlanco> <sentencias> <saltoLinea>* \?
 
-<Sentencias> ::= <sentencias> <comentarioLinea>?
+<sentencias> ::= <sentencias> <comentarioLinea>?
 
 <sentencias> ::= <sentencia> | <sentencias> <sentencia>
 
@@ -222,7 +222,9 @@
 # Comentarios en una linea o en multiples lineas:
 
 # -- Todo los comentarios permitidos.
-<comentarios> ::= <comentarioLinea> | <comentarioBloque>
+<comentarios> ::= <comentario> | <comentarios> <comentario>
+
+<comentario> ::= <comentarioLinea> | <comentarioBloque>
 
 # -- Se permite cualquier cosa menos lo que serian los saltos de linea.
 <comentarioLinea> ::= \|[^\n\r]*
