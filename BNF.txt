@@ -71,10 +71,10 @@
 
 # -- Las exresiones para una variables puden ser: nada mas numeros o caracteres, una operacion aritmetica o de union de caracteres, 
 # -- tambien puede ser entrada de teclado o tambien se podria hacer una condicional para saber asignar un valor booleano.
-<expresion> ::= <expresionNumerica> | <expresionAritmetica> | <expresionChar> | <expresionBooleana> | <expresionLogica> | <expresionRelacional>
+<expresion> ::= <expresionNumerica> | <expresionAritmetica> | <expresionChar> | <expresionString> | <expresionBooleana> | <expresionLogica> | <expresionRelacional>
 
 #-- Def de expresiones basicos.
-<expresionNumerica> ::= <entero> | <flotante> | <id> | <obtenerElementoLista> | <funcionLlamada> | <input>
+<expresionNumerica> ::= <entero> | <flotante> | <id> | <obtenerElementoLista> | <funcionLlamada> | <input> | <booleano>
 
 <expresionChar> ::= <char> | <id>
 
@@ -175,7 +175,7 @@
 <output_inline> ::= "output" "є" <expresion> "э"
 
 # Input puede ser de la forma input є tipo э
-<input> ::= "input" "є" <tipoInput> "э" <delimitador>
+<input> ::= "input" "є" <tipoInput> "э" 
 
 
 # Variables globales:
