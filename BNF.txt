@@ -1,6 +1,7 @@
 <saltoLinea> ::= "\n"
 # Números, variables y asignaciones:
 <espacio> ::= " " | "\t"
+<espacio> ::= <saltoLinea>
 <espaciosEnBlanco> ::= <espacio>* 
 # -- Definir los tipos
 <flotante> ::= (0.0) |-?0\ . [0-9]* [1-9]+|-?[1-9][0-9]* . ([0-9]*[1-9]+|0)
@@ -145,28 +146,28 @@
 
 <param> ::= <tipoVar> <espaciosEnBlanco> <id>
 
-<bloque> ::= ¿ <saltoLinea>* <espaciosEnBlanco> <sentencias> <saltoLinea>* \?
+<bloque> ::= ¿ <espaciosEnBlanco> <sentencias> <espaciosEnBlanco> \?
 
-<sentencias> ::= <sentencias> <comentarioLinea>?
+<sentencias> ::= <sentencias>
 
 <sentencias> ::= <sentencia> | <sentencias> <sentencia>
 
-<sentencia> ::= (<var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output> | <modificarElementoLista> | <lista> | <varGlobal>)
+<sentencia> ::= (<var> | <varAsignacion> | <estructruraControl> | <comentarios> | <funcionLlamada> | <return> | <break> | <output> | <modificarElementoLista> | <lista> | <varGlobal>) <espaciosEnBlanco>*
 
 <estructruraControl> ::= <decide> | <loop> | <for> # luego se definen abajo
 
 # Decide es de la forma decide of (condicion -> bloque)+ (else -> bloque)? end decide opcional
-<decide> ::= "decide" <espacio> "of" ( <condicion> "->" <bloque>)+ ("else" <bloque> )? "end" "decide" <delimitador>
+<decide> ::= "decide" <espacio> "of" <espaciosEnBlanco> ( <condicion> "->" <bloque>)+ ("else" <bloque> )? "end" <espaciosEnBlanco> "decide" <delimitador>
 
 <condicion> ::= "є" <expresion> "э"
 
 # Loop es de la forma loop instrucciones... exit wgen condicion$ end loop$
-<loop> ::= "loop" <sentencias> <break>? "exit when" <condicion> <delimitador> "end" "loop" <delimitador>
+<loop> ::= "loop" <sentencias> <break>? "exit when" <condicion> <espaciosEnBlanco> <delimitador> "end" <espaciosEnBlanco> "loop" <espaciosEnBlanco> <delimitador>
 
 # For es de la forma for <id> step <entero> to/downto <expresion> do bloque
-<for> ::= "for" <id> "step" <entero> ("to" | "downto") <expresion> "do" <bloque> <delimitador>
+<for> ::= "for" <espaciosEnBlanco> <id> <espaciosEnBlanco> "step" <espaciosEnBlanco> <entero> <espaciosEnBlanco> ("to" | "downto") <espaciosEnBlanco> <expresion> <espaciosEnBlanco> "do" <bloque> <delimitador>
 
-<funcionLlamada> ::= <id> "є" <params> "э" <delimitador> | <id> "є" "э" <delimitador>
+<funcionLlamada> ::= <id> <espaciosEnBlanco> "є" <params> "э" <espaciosEnBlanco> <delimitador> | <id> <espaciosEnBlanco> "є" "э" <delimitador>
 
 <return> ::= "return" <espaciosEnBlanco> <expresion> <espaciosEnBlanco> <delimitador> | "return" <espaciosEnBlanco> <delimitador>
 
@@ -218,7 +219,7 @@
 # Definición de unicamente un procedimiento main (principal) tipo void sin parametros:
 
 # -- Def de main, puede cambiarse 
-<principal> ::= "void" "principal" "є" <expresion> "э" <saltoLinea>* <espaciosEnBlanco> <bloque>
+<principal> ::= "void" <espaciosEnBlanco> "principal" <espaciosEnBlanco> "є" <expresion> "э" <bloque>
 
 #-- Def de un programa.
 <programa> ::= <comentarios>? (<varGlobal>*)? <comentarios>? <funciones>? <comentarios>? <principal> <comentarios>?
